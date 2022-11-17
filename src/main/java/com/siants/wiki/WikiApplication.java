@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 
+//@ComponentScan(basePackages = {"com.siants", "com.test"})
 @ComponentScan(basePackages = {"com.siants"})
 @SpringBootApplication
 @Slf4j
