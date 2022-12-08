@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class EbookReq {
+public class EbookReq extends PageReq{
     private Long id;
 
     private String name;

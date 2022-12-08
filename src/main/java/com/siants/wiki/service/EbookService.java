@@ -7,6 +7,7 @@ import com.siants.wiki.domain.EbookExample;
 import com.siants.wiki.mapper.EbookMapper;
 import com.siants.wiki.req.EbookReq;
 import com.siants.wiki.resp.EbookResp;
+import com.siants.wiki.resp.PageResp;
 import com.siants.wiki.util.CopyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -25,13 +26,13 @@ public class EbookService {
     @Resource
     private EbookMapper ebookMapper;
 
-    public List<EbookResp> list(EbookReq req) {
+    public PageResp<EbookResp> list(EbookReq req) {
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         if (!ObjectUtils.isEmpty(req.getName())) {
             criteria.andNameLike("%" + req.getName() + "%");
         }
-        PageHelper.startPage(1, 3);
+        PageHelper.startPage(req.getPage(), req.getSize());
         List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
 
         PageInfo<Ebook> pageInfo = new PageInfo<>(ebookList);
@@ -45,8 +46,13 @@ public class EbookService {
             EbookResp ebookResp = CopyUtil.copy(ebook, EbookResp.class);
             respList.add(ebookResp);
         }*/
+
         // 列表复制
         List<EbookResp> list = CopyUtil.copyList(ebookList, EbookResp.class);
-        return list;
+
+        PageResp<EbookResp> pageResp = new PageResp<>();
+        pageResp.setTotal(pageInfo.getTotal());
+        pageResp.setList(list);
+        return pageResp;
     }
 }
