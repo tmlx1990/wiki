@@ -1,11 +1,14 @@
 package com.siants.wiki.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.siants.wiki.domain.Ebook;
 import com.siants.wiki.domain.EbookExample;
 import com.siants.wiki.mapper.EbookMapper;
 import com.siants.wiki.req.EbookReq;
 import com.siants.wiki.resp.EbookResp;
 import com.siants.wiki.util.CopyUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -16,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class EbookService {
 
     @Resource
@@ -27,8 +31,12 @@ public class EbookService {
         if (!ObjectUtils.isEmpty(req.getName())) {
             criteria.andNameLike("%" + req.getName() + "%");
         }
+        PageHelper.startPage(1, 3);
         List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
 
+        PageInfo<Ebook> pageInfo = new PageInfo<>(ebookList);
+        log.info("总行数：{}", pageInfo.getTotal());
+        log.info("总页数：{}", pageInfo.getPages());
         /*List<EbookResp> respList = new ArrayList<>();
         for (Ebook ebook : ebookList) {
 //            EbookResp ebookResp = new EbookResp();
