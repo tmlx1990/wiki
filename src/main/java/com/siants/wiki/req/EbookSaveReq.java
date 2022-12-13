@@ -1,11 +1,11 @@
-package com.siants.wiki.resp;
+package com.siants.wiki.req;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class EbookResp {
+public class EbookSaveReq extends PageReq{
     private Long id;
 
     private String name;
