@@ -10,6 +10,7 @@ import com.siants.wiki.req.EbookSaveReq;
 import com.siants.wiki.resp.EbookQueryResp;
 import com.siants.wiki.resp.PageResp;
 import com.siants.wiki.util.CopyUtil;
+import com.siants.wiki.util.SnowFlake;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -23,6 +24,9 @@ public class EbookService {
 
     @Resource
     private EbookMapper ebookMapper;
+
+    @Resource
+    private SnowFlake snowFlake;
 
     public PageResp<EbookQueryResp> list(EbookQueryReq req) {
         EbookExample ebookExample = new EbookExample();
@@ -61,6 +65,7 @@ public class EbookService {
         Ebook ebook = CopyUtil.copy(req, Ebook.class);
         if (ObjectUtils.isEmpty(req.getId())) {
             // 新增
+            ebook.setId(snowFlake.nextId());
             ebookMapper.insert(ebook);
         } else {
             // 更新
