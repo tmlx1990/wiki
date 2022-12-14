@@ -1,11 +1,37 @@
 <template>
   <a-layout style="padding: 24px 0; background: #fff">
     <a-layout-content :style="{ padding: '0 24px', minHeight: '280px' }">
-      <p>
-        <a-button type="primary" @click="add()" size="large">
-          新增
-        </a-button>
-      </p>
+      <a-form
+          layout="inline"
+          :model="param"
+          @finish="handleFinish"
+          @finishFailed="handleFinishFailed"
+      >
+        <a-form-item>
+          <a-input v-model:value="param.name" placeholder="名称">
+            <template #prefix><UserOutlined style="color: rgba(0, 0, 0, 0.25)" /></template>
+          </a-input>
+        </a-form-item>
+        <a-form-item>
+          <a-space size="small">
+            <a-button
+                type="primary"
+                html-type="submit"
+                :disabled="param.name === ''"
+                @click="handleQuery({page: 1, size: pagination.pageSize})"
+            >
+              查询
+            </a-button>
+            <a-button
+                type="primary"
+                html-type="submit"
+                @click="add()"
+            >
+              新增
+            </a-button>
+          </a-space>
+        </a-form-item>
+      </a-form>
       <a-table
           :columns="columns"
           :data-source="ebooks"
@@ -74,6 +100,8 @@ import {message} from "ant-design-vue";
 export default defineComponent({
   name: 'AdminEbook',
   setup() {
+    const param = ref();
+    param.value = {};
     const ebooks = ref();
     const pagination = ref({
       current: 1,
@@ -131,7 +159,8 @@ export default defineComponent({
       axios.get("/ebook/list", {
         params: {
           page: params.page,
-          size: params.size
+          size: params.size,
+          name: param.value.name,
         }
       }).then((response) => {
         loading.value = false;
@@ -235,7 +264,8 @@ export default defineComponent({
       modalLoading,
       handleModalOk,
       handleDelete,
-
+      param,
+      handleQuery
     };
   },
 });
