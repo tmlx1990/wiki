@@ -8,17 +8,12 @@
           @finishFailed="handleFinishFailed"
       >
         <a-form-item>
-          <a-input v-model:value="param.name" placeholder="名称">
-            <template #prefix><UserOutlined style="color: rgba(0, 0, 0, 0.25)" /></template>
-          </a-input>
-        </a-form-item>
-        <a-form-item>
           <a-space size="small">
             <a-button
                 type="primary"
                 html-type="submit"
                 :disabled="param.name === ''"
-                @click="handleQuery({page: 1, size: pagination.pageSize})"
+                @click="handleQuery()"
             >
               查询
             </a-button>
@@ -36,9 +31,8 @@
           :columns="columns"
           :data-source="categorys"
           :row-key="record => record.id"
-          :pagination="pagination"
           :loading="loading"
-          @change="handleTableChange"
+          :pagination="false"
       >
         <template #cover="{ text: cover}">
           <img v-if="cover" :src="cover" alt="avatar" />
@@ -97,11 +91,6 @@ export default defineComponent({
     const param = ref();
     param.value = {};
     const categorys = ref();
-    const pagination = ref({
-      current: 1,
-      pageSize: 10,
-      total: 0
-    });
     const loading = ref(false);
 
     const columns = [
@@ -129,38 +118,17 @@ export default defineComponent({
     /**
      * 数据查询
      */
-    const handleQuery = (params: any) => {
+    const handleQuery = () => {
       loading.value = true;
-      axios.get("/category/list", {
-        params: {
-          page: params.page,
-          size: params.size,
-          name: param.value.name,
-        }
-      }).then((response) => {
+      axios.get("/category/all").then((response) => {
         loading.value = false;
         const data = response.data;
         if (data.success) {
-          categorys.value = data.content.list;
-
-          // 重置分页按钮
-          pagination.value.current = params.page;
-          pagination.value.total = data.content.total;
+          categorys.value = data.content;
         } else {
           message.error(data.message);
         }
 
-      });
-    };
-
-    /**
-     * 表格点击页面触发
-     */
-    const handleTableChange = (pagination: any) => {
-      console.log("看看自带的分页参数都有什么：" + pagination);
-      handleQuery({
-        page: pagination.current,
-        size: pagination.pageSize
       });
     };
 
@@ -177,10 +145,7 @@ export default defineComponent({
           modalVisible.value = false;
 
           // 重新加载列表
-          handleQuery({
-            page: pagination.value.current,
-            size: pagination.value.pageSize
-          });
+          handleQuery();
         } else {
           message.error(data.message);
         }
@@ -208,28 +173,20 @@ export default defineComponent({
         const data = response.data; // data = commonResp
         if (data.success) {
           // 重新加载列表
-          handleQuery({
-            page: pagination.value.current,
-            size: pagination.value.pageSize
-          });
+          handleQuery();
         }
       });
     };
 
 
     onMounted(() => {
-      handleQuery({
-        page: 1,
-        size: pagination.value.pageSize
-      });
+      handleQuery();
     });
 
     return {
       categorys,
-      pagination,
       columns,
       loading,
-      handleTableChange,
 
       edit,
       add,
