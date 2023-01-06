@@ -10,15 +10,14 @@ public class EbookQueryReq extends PageReq{
 
     private String name;
 
+    private Long categoryId2;
+
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", name=").append(name);
-        sb.append("]");
-        return sb.toString();
+        return "EbookQueryReq{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", categoryId2=" + categoryId2 +
+                "} " + super.toString();
     }
 }
