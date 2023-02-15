@@ -1,5 +1,6 @@
 package com.siants.wiki.controller;
 
+import com.siants.wiki.domain.Content;
 import com.siants.wiki.req.DocQueryReq;
 import com.siants.wiki.req.DocSaveReq;
 import com.siants.wiki.resp.DocQueryResp;
@@ -48,6 +49,14 @@ public class DocController {
         CommonResp resp = new CommonResp();
         List<String> list = Arrays.asList(idsStr.split(","));
         docService.delete(list);
+        return resp;
+    }
+
+    @GetMapping("/find-content/{id}")
+    public CommonResp findContent(@PathVariable Long id) {
+        CommonResp<String> resp = new CommonResp<>();
+        String content = docService.findContent(id);
+        resp.setContent(content);
         return resp;
     }
 
