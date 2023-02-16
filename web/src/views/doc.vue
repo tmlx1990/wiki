@@ -82,7 +82,7 @@ import {message} from "ant-design-vue";
 
             if (Tool.isNotEmpty(level1)) {
               defaultSelectedKeys.value = [level1.value[0].id];
-              handleQueryContent(level1.value[0]);
+              handleQueryContent(level1.value[0].id);
             }
           } else {
             message.error(data.message);
