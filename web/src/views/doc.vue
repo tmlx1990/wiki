@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import {defineComponent, onMounted, ref} from "vue";
-  import {useRoute} from "vue-router";
+import {useRoute} from "vue-router";
 import axios from "axios";
 import {Tool} from "@/util/tool";
 import {message} from "ant-design-vue";
