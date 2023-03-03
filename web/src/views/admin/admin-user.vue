@@ -38,6 +38,9 @@
       >
         <template v-slot:action="{ text, record }">
           <a-space size="small">
+            <a-button type="primary" @click="resetPassword(record)">
+              重置密码
+            </a-button>
             <a-button type="primary" @click="edit(record)">
               编辑
             </a-button>
@@ -71,6 +74,19 @@
         <a-input v-model:value="user.name" />
       </a-form-item>
       <a-form-item label="密码" v-show="!user.id">
+        <a-input v-model:value="user.password" type="textarea" />
+      </a-form-item>
+    </a-form>
+  </a-modal>
+
+  <a-modal
+      v-model:visible="resetModalVisible"
+      title="重置密码"
+      :confirm-loading="resetModalLoading"
+      @ok="handleResetModalOk"
+  >
+    <a-form :model="user" :label-col="{ span: 6}">
+      <a-form-item label="新密码">
         <a-input v-model:value="user.password" type="textarea" />
       </a-form-item>
     </a-form>
@@ -215,6 +231,38 @@ export default defineComponent({
       })
     }
 
+    // -------- 重置密码 --------
+    const resetModalVisible = ref(false);
+    const resetModalLoading = ref(false);
+    const handleResetModalOk = () => {
+      resetModalLoading.value = false;
+      user.value.password = hexMd5(user.value.password + KEY);
+
+      axios.post("/user/reset-password", user.value).then((resp)=>{
+        const data = resp.data;
+        if (data.success){
+          resetModalVisible.value = false;
+          //重新加载列表
+          handleQuery({
+            page: pagination.value.current,
+            size: pagination.value.pageSize,
+          })
+        } else {
+          message.error(data.message);
+        }
+      })
+    };
+
+    /**
+     * 重置密码
+     */
+    const resetPassword = (record: any) => {
+      resetModalVisible.value = true;
+      user.value = Tool.copy(record);
+      user.value.password = null;
+    };
+
+
     onMounted(() => {
       handleQuery({
         page:1,
@@ -238,6 +286,10 @@ export default defineComponent({
       add,
       handleDelete,
       handleQuery,
+      resetModalVisible,
+      resetModalLoading,
+      handleResetModalOk,
+      resetPassword
     };
   },
 });

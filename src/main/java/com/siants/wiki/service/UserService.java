@@ -8,6 +8,7 @@ import com.siants.wiki.exception.BusinessException;
 import com.siants.wiki.exception.BusinessExceptionCode;
 import com.siants.wiki.mapper.UserMapper;
 import com.siants.wiki.req.UserQueryReq;
+import com.siants.wiki.req.UserResetPasswordReq;
 import com.siants.wiki.req.UserSaveReq;
 import com.siants.wiki.resp.UserQueryResp;
 import com.siants.wiki.resp.PageResp;
@@ -99,5 +100,13 @@ public class UserService {
         } else {
             return userList.get(0);
         }
+    }
+
+    /**
+     * 修改密码
+     */
+    public void resetPassword(UserResetPasswordReq req) {
+        User user = CopyUtil.copy(req, User.class);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 }

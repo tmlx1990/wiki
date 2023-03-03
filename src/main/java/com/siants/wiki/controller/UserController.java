@@ -1,6 +1,7 @@
 package com.siants.wiki.controller;
 
 import com.siants.wiki.req.UserQueryReq;
+import com.siants.wiki.req.UserResetPasswordReq;
 import com.siants.wiki.req.UserSaveReq;
 import com.siants.wiki.resp.CommonResp;
 import com.siants.wiki.resp.UserQueryResp;
@@ -42,4 +43,11 @@ public class UserController {
         return resp;
     }
 
+    @PostMapping("/reset-password")
+    public CommonResp resetPassword(@Valid @RequestBody UserResetPasswordReq req) {
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
+        CommonResp resp = new CommonResp();
+        userService.resetPassword(req);
+        return resp;
+    }
 }
