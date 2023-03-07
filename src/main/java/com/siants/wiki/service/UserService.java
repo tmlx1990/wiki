@@ -7,9 +7,11 @@ import com.siants.wiki.domain.UserExample;
 import com.siants.wiki.exception.BusinessException;
 import com.siants.wiki.exception.BusinessExceptionCode;
 import com.siants.wiki.mapper.UserMapper;
+import com.siants.wiki.req.UserLoginReq;
 import com.siants.wiki.req.UserQueryReq;
 import com.siants.wiki.req.UserResetPasswordReq;
 import com.siants.wiki.req.UserSaveReq;
+import com.siants.wiki.resp.UserLoginResp;
 import com.siants.wiki.resp.UserQueryResp;
 import com.siants.wiki.resp.PageResp;
 import com.siants.wiki.util.CopyUtil;
@@ -108,5 +110,28 @@ public class UserService {
     public void resetPassword(UserResetPasswordReq req) {
         User user = CopyUtil.copy(req, User.class);
         userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    /**
+     * 登录
+     */
+    public UserLoginResp login(UserLoginReq req) {
+        User userDB = selectByLoginName(req.getLoginName());
+        if (ObjectUtils.isEmpty(userDB)) {
+            // 用户名不存在
+            log.info("用户名不存在，{}", req.getLoginName());
+            throw new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
+        } else {
+            if (userDB.getPassword().equals(req.getPassword())) {
+                // 登录成功
+                UserLoginResp userLoginResp = CopyUtil.copy(userDB, UserLoginResp.class);
+                return userLoginResp;
+            } else {
+                // 密码不对
+                log.info("密码不对，输入密码：{}，数据库密码：{}", req.getPassword(), userDB.getPassword());
+                throw new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
+            }
+        }
+
     }
 }
