@@ -10,8 +10,12 @@ import AdminDoc from '../views/admin/admin-doc.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
+    redirect: '/home'
+  },
+  {
+    path: '/home',
     name: 'home',
-   component: HomeView
+    component: HomeView
   },
   {
     path: '/doc',
