@@ -216,7 +216,7 @@ export default defineComponent({
     };
 
     //删除
-    const handleDelete = (id:number)=>{
+    const handleDelete = (id: number)=>{
       axios.delete("/user/delete/"+id).then((response)=>{
         const data = response.data;
         if (data.success){
