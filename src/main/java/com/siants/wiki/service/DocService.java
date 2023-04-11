@@ -7,6 +7,7 @@ import com.siants.wiki.domain.Doc;
 import com.siants.wiki.domain.DocExample;
 import com.siants.wiki.mapper.ContentMapper;
 import com.siants.wiki.mapper.DocMapper;
+import com.siants.wiki.mapper.DocMapperCust;
 import com.siants.wiki.req.DocQueryReq;
 import com.siants.wiki.req.DocSaveReq;
 import com.siants.wiki.resp.DocQueryResp;
@@ -29,6 +30,9 @@ public class DocService {
 
     @Resource
     private ContentMapper contentMapper;
+
+    @Resource
+    private DocMapperCust docMapperCust;
 
     @Resource
     private SnowFlake snowFlake;
@@ -82,6 +86,8 @@ public class DocService {
         if (ObjectUtils.isEmpty(req.getId())) {
             // 新增
             doc.setId(snowFlake.nextId());
+            doc.setViewCount(0);
+            doc.setVoteCount(0);
             docMapper.insert(doc);
             content.setId(doc.getId());
             contentMapper.insert(content);
@@ -108,6 +114,8 @@ public class DocService {
 
     public String findContent(Long id) {
         Content content = contentMapper.selectByPrimaryKey(id);
+        // 文档阅读数加1
+        docMapperCust.increaseViewCount(id);
         if (ObjectUtils.isEmpty(content)) {
             return "";
         } else {

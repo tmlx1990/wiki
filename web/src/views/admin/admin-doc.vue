@@ -80,14 +80,12 @@
             <a-form-item>
               <a-tree-select
                   v-model:value="doc.parent"
-                  show-search
                   style="width: 100%"
                   :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
                   placeholder="请选择父文档"
-                  allow-clear
                   tree-default-expand-all
                   :tree-data="treeSelectData"
-                  :field-names="{label: 'name', value: 'id'}"
+                  :replaceFields="{title: 'name', key: 'id', value: 'id'}"
               >
               </a-tree-select>
             </a-form-item>
@@ -198,7 +196,7 @@ export default defineComponent({
           level1.value = Tool.array2Tree(docs.value, 0);
           console.log("树形结构：", level1);
           // 父文档下拉框初始化，相当于点击新增
-          treeSelectData.value = Tool.copy(level1.value);
+          treeSelectData.value = Tool.copy(level1.value) || [];
           // 为选择树添加一个"无"
           treeSelectData.value.unshift({id: 0, name: '无'});
         } else {
