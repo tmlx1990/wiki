@@ -121,7 +121,7 @@ import {message} from "ant-design-vue";
 
       // 点赞
       const vote = () => {
-        axios.post("/doc/vote/" + doc.value.id).then((response) => {
+        axios.get("/doc/vote/" + doc.value.id).then((response) => {
           const data = response.data;
           if (data.success) {
             doc.value.voteCount++;
