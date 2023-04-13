@@ -5,6 +5,8 @@ import com.github.pagehelper.PageInfo;
 import com.siants.wiki.domain.Content;
 import com.siants.wiki.domain.Doc;
 import com.siants.wiki.domain.DocExample;
+import com.siants.wiki.exception.BusinessException;
+import com.siants.wiki.exception.BusinessExceptionCode;
 import com.siants.wiki.mapper.ContentMapper;
 import com.siants.wiki.mapper.DocMapper;
 import com.siants.wiki.mapper.DocMapperCust;
@@ -13,6 +15,8 @@ import com.siants.wiki.req.DocSaveReq;
 import com.siants.wiki.resp.DocQueryResp;
 import com.siants.wiki.resp.PageResp;
 import com.siants.wiki.util.CopyUtil;
+import com.siants.wiki.util.RedisUtil;
+import com.siants.wiki.util.RequestContext;
 import com.siants.wiki.util.SnowFlake;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,6 +40,9 @@ public class DocService {
 
     @Resource
     private SnowFlake snowFlake;
+
+    @Resource
+    public RedisUtil redisUtil;
 
     public PageResp<DocQueryResp> list(DocQueryReq req) {
         DocExample docExample = new DocExample();
@@ -127,6 +134,13 @@ public class DocService {
      * 点赞
      */
     public void vote(Long id) {
-        docMapperCust.increaseVoteCount(id);
+        //docMapperCust.increaseVoteCount(id);
+        // 远程IP+doc.id作为key，24小时内不能重复
+        String key = RequestContext.getRemoteAddr();
+        if (redisUtil.validateRepeat("DOC_VOTE_" + id + "_" + key, 24 * 60 * 60)) {
+            docMapperCust.increaseVoteCount(id);
+        } else {
+            throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
+        }
     }
 }
