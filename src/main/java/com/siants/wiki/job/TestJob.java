@@ -1,3 +1,4 @@
+/*
 package com.siants.wiki.job;
 
 import lombok.extern.slf4j.Slf4j;
@@ -11,10 +12,12 @@ import java.util.Date;
 @Component
 public class TestJob {
 
-    /**
+    */
+/**
      * 固定时间间隔，fixedRate单位毫秒
      * @throws InterruptedException
-     */
+     *//*
+
     @Scheduled(fixedRate = 5000)
     public void simple() throws InterruptedException {
         SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");
@@ -23,10 +26,12 @@ public class TestJob {
         log.info("每隔5秒执行一次: {}", dateString);
     }
 
-    /**
+    */
+/**
      * 自定义cron表达式跑批
      * 只有等上一次执行完成，下一次才会下一个时间点执行，错过就错过
-     */
+     *//*
+
     @Scheduled(cron = "0/2 * * * * ?")
     public void cron() throws InterruptedException {
         SimpleDateFormat formatter = new SimpleDateFormat("mm:ss:SSS");
@@ -35,3 +40,4 @@ public class TestJob {
         log.info("每隔2秒钟执行一次: {}", dateString);
     }
 }
+*/
