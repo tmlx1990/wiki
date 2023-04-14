@@ -6,8 +6,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Slf4j
 @Component
@@ -21,6 +19,9 @@ public class DocJob {
      */
     @Scheduled(cron = "5/30 * * * * ?")
     public void cron() {
+        log.info("更新电子书下的文档数据开始");
+        long start = System.currentTimeMillis();
         docService.updateEbookInfo();
+        log.info("更新电子书下的文档数据结束，耗时：{}毫秒", System.currentTimeMillis() - start);
     }
 }
