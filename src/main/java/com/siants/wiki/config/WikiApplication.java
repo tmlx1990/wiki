@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 //@ComponentScan(basePackages = {"com.siants", "com.test"})
 @ComponentScan(basePackages = {"com.siants"})
@@ -14,6 +15,7 @@ import org.springframework.core.env.Environment;
 @MapperScan(basePackages = {"com.siants.wiki.mapper"})
 @Slf4j
 @EnableCaching
+@EnableScheduling
 public class WikiApplication {
 
     public static void main(String[] args) {
