@@ -20,6 +20,7 @@ import com.siants.wiki.util.RequestContext;
 import com.siants.wiki.util.SnowFlake;
 import com.siants.wiki.websocket.WebSocketServer;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -151,7 +152,8 @@ public class DocService {
 
         // 推送消息
         Doc docDb = docMapper.selectByPrimaryKey(id);
-        wsService.sendInfo("【" + docDb.getName() + "】被点赞了");
+        String logId = MDC.get("LOG_ID");
+        wsService.sendInfo("【" + docDb.getName() + "】被点赞了", logId);
     }
 
 
