@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 //@ComponentScan(basePackages = {"com.siants", "com.test"})
@@ -16,6 +17,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @Slf4j
 @EnableCaching
 @EnableScheduling
+@EnableAsync
 public class WikiApplication {
 
     public static void main(String[] args) {
