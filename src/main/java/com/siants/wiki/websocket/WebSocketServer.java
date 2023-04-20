@@ -59,7 +59,7 @@ public class WebSocketServer {
     /**
      * 群发消息
      */
-    public static void sendInfo(String message) {
+    public void sendInfo(String message) {
         for (String token : map.keySet()) {
             Session session = map.get(token);
             try {

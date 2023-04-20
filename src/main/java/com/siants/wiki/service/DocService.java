@@ -18,6 +18,7 @@ import com.siants.wiki.util.CopyUtil;
 import com.siants.wiki.util.RedisUtil;
 import com.siants.wiki.util.RequestContext;
 import com.siants.wiki.util.SnowFlake;
+import com.siants.wiki.websocket.WebSocketServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -43,6 +44,9 @@ public class DocService {
 
     @Resource
     public RedisUtil redisUtil;
+
+    @Resource
+    public WebSocketServer webSocketServer;
 
     public PageResp<DocQueryResp> list(DocQueryReq req) {
         DocExample docExample = new DocExample();
@@ -142,6 +146,10 @@ public class DocService {
         } else {
             throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
         }
+
+        // 推送消息
+        Doc docDb = docMapper.selectByPrimaryKey(id);
+        webSocketServer.sendInfo("【" + docDb.getName() + "】被点赞了");
     }
 
     public void updateEbookInfo() {
