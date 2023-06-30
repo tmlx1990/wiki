@@ -9,7 +9,7 @@
       >
         <a-menu-item key="welcome">
           <MailOutlined />
-          <span>欢迎</span>
+          <TheWelcome></TheWelcome>
         </a-menu-item>
         <a-sub-menu v-for="item in level1" :key="item.id">
           <template v-slot:title>
@@ -29,7 +29,7 @@
     </a-layout-sider>
     <a-layout-content :style="{ padding: '0 24px', minHeight: '280px' }">
       <div class="welcome" v-show="isShowWelcome">
-        <h1>欢迎使用知识库</h1>
+        <TheWelcome></TheWelcome>
       </div>
       <a-list v-show="!isShowWelcome" item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3}" :data-source="ebooks">
         <template #renderItem="{ item }">
@@ -69,6 +69,7 @@ import {defineComponent, onMounted, reactive, ref, toRef} from 'vue';
 import axios from "axios";
 import {Tool} from "@/util/tool";
 import {message} from "ant-design-vue";
+import TheWelcome from "@/components/the-welcome.vue";
 
 // const listData: Record<string, string>[] = [];
 //
@@ -87,12 +88,9 @@ import {message} from "ant-design-vue";
 
 export default defineComponent({
   name: 'HomeView',
-  /*components: {
-    StarOutlined,
-    LikeOutlined,
-    MessageOutlined,
+  components: {
+    TheWelcome
   },
-  */
   setup() {
     const ebooks = ref();
     const ebooks1 = reactive({books: []});
