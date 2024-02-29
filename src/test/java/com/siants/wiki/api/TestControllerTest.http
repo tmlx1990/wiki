@@ -1,0 +1,26 @@
+GET http://localhost:8080/wiki/hello
+Accept: application/json
+
+###
+
+POST http://localhost:8080/wiki/hello/post
+Content-Type: application/json
+
+{
+  "name": "John"
+}
+
+###
+
+GET http://localhost:8080/wiki/test/list
+Accept: application/json
+
+###
+
+GET http://localhost:8080/wiki/redis/set/123/asd
+Accept: application/json
+
+###
+
+GET http://localhost:8080/wiki/redis/get/123
+Accept: application/json
