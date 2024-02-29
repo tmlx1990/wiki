@@ -3,4 +3,5 @@ Accept: application/json
 
 ###
 
-
+GET http://localhost:8080/wiki/doc/all?ebookId=1
+Accept: application/xml
