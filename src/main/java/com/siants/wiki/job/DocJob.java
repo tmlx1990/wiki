@@ -31,4 +31,18 @@ public class DocJob {
         docService.updateEbookInfo();
         log.info("更新电子书下的文档数据结束，耗时：{}毫秒", System.currentTimeMillis() - start);
     }
+
+
+    /**
+     * 每天更新一次电子书信息
+     */
+    @Scheduled(cron = "0 10 1 * * ?")
+    public void crons() {
+        // 增加日志流水号
+        MDC.put("LOG_ID", String.valueOf(snowFlake.nextId()));
+        log.info("更新电子书下的文档数据开始");
+        long start = System.currentTimeMillis();
+        docService.updateEbookInfo();
+        log.info("更新电子书下的文档数据结束，耗时：{}毫秒", System.currentTimeMillis() - start);
+    }
 }
